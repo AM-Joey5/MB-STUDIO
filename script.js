@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MB STUDIO — script.js
+   MB STUDIO — script.js (Phase 1: Enhanced)
    Vanilla JS only. No dependencies, no frameworks.
    Sections:
      1. Page loader
@@ -10,6 +10,7 @@
      6. Gallery filter + lightbox
      7. Testimonials slider
      8. Contact form validation
+     9. Enhanced animations (cursor glow, floating elements)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -285,5 +286,67 @@ document.addEventListener('DOMContentLoaded', () => {
       contactForm.reset();
     });
   }
+
+  /* ---------------------------------------------------------------------
+     9. PHASE 1: Enhanced animations and micro-interactions
+  --------------------------------------------------------------------- */
+
+  // Reduced motion check
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 9a. Hero eyebrow animation
+  const heroEyebrow = document.querySelector('.hero-content .eyebrow');
+  if (heroEyebrow && !prefersReducedMotion) {
+    heroEyebrow.style.animation = 'fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) both';
+  }
+
+  // 9b. Enhanced card hover with subtle glow
+  document.querySelectorAll('.card').forEach((card) => {
+    card.addEventListener('mouseenter', function() {
+      if (!prefersReducedMotion) {
+        this.style.setProperty('--card-glow', '1');
+      }
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.setProperty('--card-glow', '0');
+    });
+  });
+
+  // 9c. Stagger animation for stats
+  const stats = document.querySelectorAll('.stat');
+  if ('IntersectionObserver' in window && stats.length) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const stat = entry.target;
+          const num = stat.querySelector('.num');
+          if (num && !prefersReducedMotion) {
+            const finalValue = num.textContent;
+            num.style.animation = 'slideInNumber 1.2s cubic-bezier(0.22, 1, 0.36, 1)';
+          }
+          statsObserver.unobserve(stat);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    stats.forEach((stat) => statsObserver.observe(stat));
+  }
+
+  // 9d. Smooth button interactions with ripple effect (CSS handles the visual)
+  document.querySelectorAll('.btn').forEach((btn) => {
+    btn.addEventListener('click', function(e) {
+      if (!prefersReducedMotion) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.pointerEvents = 'none';
+      }
+    });
+  });
 
 });
