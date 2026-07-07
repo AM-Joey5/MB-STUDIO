@@ -1,8 +1,8 @@
 /* ==========================================================================
-   MB STUDIO — Stylesheet
+   MB STUDIO — Stylesheet (Phase 1: Premium Upgrade)
    Design system: dark luxury, antique-gold accent, waveform motif.
    Sections: 1. Reset & Tokens  2. Typography  3. Layout Utilities
-             4. Navigation      5. Buttons     6. Hero
+             4. Navigation      5. Buttons     6. Hero (ENHANCED)
              7. Sections (about/services/gallery/testimonials/contact)
              8. Footer          9. Components (cards, forms, slider, loader)
              10. Animations     11. Responsive
@@ -43,6 +43,8 @@ html { scroll-behavior: smooth; }
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
 }
 
 html, body { margin: 0; padding: 0; }
@@ -182,24 +184,75 @@ h3 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); }
   padding: 0.9rem 1.9rem; border-radius: 999px; font-size: 0.88rem; letter-spacing: 0.03em;
   font-weight: 600; border: 1px solid transparent; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s;
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
 }
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .btn-primary {
   background: linear-gradient(135deg, var(--color-gold-bright), var(--color-gold));
   color: #14100A;
   box-shadow: 0 8px 24px -8px rgba(201, 162, 75, 0.55);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -8px rgba(201, 162, 75, 0.75); }
-.btn-ghost { border-color: var(--color-line); color: var(--color-text); background: rgba(255,255,255,0.02); }
-.btn-ghost:hover { border-color: var(--color-gold); color: var(--color-gold-bright); }
+.btn-primary:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 12px 30px -8px rgba(201, 162, 75, 0.75); 
+}
+.btn-primary:active::before {
+  animation: ripple 0.6s ease-out;
+}
+
+.btn-ghost { 
+  border-color: var(--color-line); 
+  color: var(--color-text); 
+  background: rgba(255,255,255,0.02); 
+}
+.btn-ghost:hover { 
+  border-color: var(--color-gold); 
+  color: var(--color-gold-bright); 
+  background: rgba(201, 162, 75, 0.05);
+}
+
 .btn-sm { padding: 0.6rem 1.3rem; font-size: 0.8rem; }
 .btn-block { width: 100%; }
 
-/* ---------- 6. Hero ---------- */
+@keyframes ripple {
+  to {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+/* ---------- 6. Hero (ENHANCED) ---------- */
 .hero {
   min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden;
   padding-top: 6rem;
   background: radial-gradient(ellipse at 70% 20%, rgba(201,162,75,0.14), transparent 60%), var(--color-bg);
 }
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(201, 162, 75, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(201, 162, 75, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .hero-waveform {
   position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center;
   gap: 4px; padding-bottom: 0; opacity: 0.35; z-index: 0; pointer-events: none;
@@ -209,40 +262,130 @@ h3 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); }
   animation: wave 2.4s ease-in-out infinite;
   border-radius: 3px 3px 0 0;
 }
-@keyframes wave { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+
+@keyframes wave { 
+  0%, 100% { transform: scaleY(0.25); } 
+  50% { transform: scaleY(1); } 
+}
+
 .hero-content { position: relative; z-index: 2; max-width: 760px; }
-.hero-content h1 { margin: 1.1rem 0 1.4rem; }
-.hero-actions { display: flex; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap; }
+.hero-content h1 { 
+  margin: 1.1rem 0 1.4rem; 
+  animation: fadeInUp 0.8s var(--ease) 0.1s both;
+}
+.hero-content .lede { 
+  animation: fadeInUp 0.8s var(--ease) 0.2s both;
+}
+
+.hero-actions { 
+  display: flex; 
+  gap: 1rem; 
+  margin-top: 2.2rem; 
+  flex-wrap: wrap; 
+}
+
+.hero-actions .btn {
+  animation: fadeInUp 0.8s var(--ease) 0.3s both;
+}
+
 .hero-scroll-cue {
   position: absolute; bottom: 2.4rem; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
   font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.2em; color: var(--color-text-faint);
   z-index: 2;
+  animation: fadeIn 1s var(--ease) 0.6s both;
 }
-.hero-scroll-cue .line { width: 1px; height: 34px; background: linear-gradient(to bottom, var(--color-gold), transparent); animation: scrollcue 2s ease-in-out infinite; }
-@keyframes scrollcue { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+.hero-scroll-cue .line { 
+  width: 1px; 
+  height: 34px; 
+  background: linear-gradient(to bottom, var(--color-gold), transparent); 
+  animation: scrollcue 2s ease-in-out infinite; 
+}
 
-/* ---------- 7. Glass panels / cards ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollcue { 
+  0%, 100% { opacity: 0.3; } 
+  50% { opacity: 1; } 
+}
+
+@keyframes slideInNumber {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 7. Glass panels / cards (ENHANCED) ---------- */
 .glass {
   background: rgba(26, 24, 32, 0.5);
   border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 }
+
 .card {
   background: var(--color-bg-raised);
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   padding: clamp(1.6rem, 2.5vw, 2.2rem);
-  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease), background 0.4s var(--ease);
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
-.card:hover { transform: translateY(-6px); border-color: var(--color-gold-dim); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6); }
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 162, 75, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-gold-dim);
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6), 0 0 30px -5px rgba(201, 162, 75, 0.15);
+  background: rgba(26, 24, 32, 0.6);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
 .card .icon {
   width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--color-gold-dim);
   display: flex; align-items: center; justify-content: center; color: var(--color-gold); margin-bottom: 1.2rem; font-size: 1.2rem;
+  transition: transform 0.3s var(--ease);
 }
+
+.card:hover .icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
 .card h3 { margin-bottom: 0.6rem; }
 .card p { color: var(--color-text-muted); font-size: 0.95rem; }
 .card .tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.16em; color: var(--color-gold); text-transform: uppercase; }
